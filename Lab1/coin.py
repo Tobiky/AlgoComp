@@ -13,9 +13,9 @@ def a(required: int, lookup: List[int]):
         return 0
     else:
         new_lookup = list(filter(lambda x: x <= required, lookup))
-        values = list(map(lambda x: a(required - x, new_lookup), new_lookup))
+        values = list(map(lambda x: 1 + a(required - x, new_lookup), new_lookup))
         values.append(required)
-        return 1 + min(values)
+        return min(values)
 
 def b(required: int, lookup: List[int]):
     pass
