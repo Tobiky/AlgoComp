@@ -1,26 +1,26 @@
 #!/usr/bin/python
 from importlib import import_module
-from multiprocessing import Process
 from time import time_ns
-from typing import Callable
-from threading import Thread
+from typing import Any, Callable
 
-max_timeout = 3 * 60 * 60
+max_timeout = 3 * 60 * 60 # 3 min
 
-def time_process(process_creation: Callable[[], Thread], timeout: int | None = None, repitions: int | None = None):
+def time_process(func: Callable[..., Any], args: list, timeout: int | None = None, repitions: int | None = None):
     total_time = 0
-    repitions = repitions or 100
+    repitions = repitions or 1
 
     for _ in range(repitions):
-        process = process_creation()
+        # process = Process(target=func, args=args)
 
+        # process.start()
         start = time_ns()
-        process.start()
 
-        process.join(timeout or max_timeout) # seconds
-        if process.is_alive():
-            process.terminate()
-        
+        # process.join(timeout or max_timeout) # seconds
+        # if process.is_alive():
+        #     process.terminate()
+
+        func(*args)
+
         stop = time_ns()
 
         duration = stop - start
@@ -47,40 +47,49 @@ def constant(n: int):
 if __name__ == "__main__":
     ns_time_const = 10 ** 9
 
-    func = "a"
+    func = "b"
     mod  = "coin"
     module = import_module(mod)
 
     coins = [5, 6, 7]
 
-    closest_n = (float('inf'), 0)
+    get_duration = lambda size: time_process(
+            func=getattr(module, func),
+            args=[size, coins])
 
-    get_duration = lambda: time_process(process_creation=lambda: Thread(target=getattr(module, func), args=[size, coins]))
+    calculations: list[tuple[float, int]] = []
 
     for size in linear(1):
-        duration = get_duration()
+        duration = get_duration(size)
+        print(f"# Attempting: ({size}, {duration / ns_time_const})")
 
-        if abs(duration - ns_time_const) < abs(closest_n[0] - ns_time_const):
-            closest_n = (duration, size)
-        else:
+        calculations.append((duration, size))
+
+        if duration / ns_time_const > 1.5: # larger than 3 min
             break
 
+    closest_n = sorted(calculations, key=lambda x: abs(x[0] - ns_time_const))[0]
+
+    print(f"# Found closest N to be {closest_n[1]}, at {closest_n[0] / ns_time_const} s")
+
     print("# Linear Increase")
-    print("# size, ns")
+    print("# size, s")
     for size in linear(closest_n[1]):
-        duration = get_duration() 
+        duration = get_duration(size)
 
-        print(f"{size},{duration}")
+        print(f"{size},{duration / ns_time_const}")
 
-        if duration >= max_timeout:
+        if duration / ns_time_const > max_timeout: # larger than 3 min
+            print("break")
             break
 
     print("# Doubling Increase")
-    print("# size, ns")
+    print("# size, s")
     for size in doubled(closest_n[1]):
-        duration = get_duration() 
+        duration = get_duration(size)
 
-        print(f"{size},{duration}")
+        print(f"{size},{duration / ns_time_const}")
 
-        if duration >= max_timeout:
+        if duration / ns_time_const > max_timeout: # larger than 3 min
             break
+

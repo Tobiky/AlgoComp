@@ -17,8 +17,7 @@ def a(required: int, lookup: List[int]):
         values.append(required)
         return min(values)
 
-def b(required: int, lookup: List[int]):
-    pass
+b = a
 
 def c(required: int, lookup: List[int]):
     pass
