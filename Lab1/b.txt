@@ -1,0 +1,117 @@
+# Attempting: (1, 3.206e-06)
+# Attempting: (2, 1.593e-06)
+# Attempting: (3, 1.022e-06)
+# Attempting: (4, 7.92e-07)
+# Attempting: (5, 1.643e-06)
+# Attempting: (6, 2.325e-06)
+# Attempting: (7, 3.757e-06)
+# Attempting: (8, 3.005e-06)
+# Attempting: (9, 2.825e-06)
+# Attempting: (10, 4.117e-06)
+# Attempting: (11, 4.849e-06)
+# Attempting: (12, 5.3e-06)
+# Attempting: (13, 7.975e-06)
+# Attempting: (14, 8.285e-06)
+# Attempting: (15, 8.887e-06)
+# Attempting: (16, 9.878e-06)
+# Attempting: (17, 1.2113e-05)
+# Attempting: (18, 1.577e-05)
+# Attempting: (19, 2.0208e-05)
+# Attempting: (20, 2.3715e-05)
+# Attempting: (21, 2.6841e-05)
+# Attempting: (22, 3.0617e-05)
+# Attempting: (23, 3.7691e-05)
+# Attempting: (24, 4.822e-05)
+# Attempting: (25, 6.0223e-05)
+# Attempting: (26, 7.0362e-05)
+# Attempting: (27, 8.031e-05)
+# Attempting: (28, 9.4718e-05)
+# Attempting: (29, 0.000107041)
+# Attempting: (30, 0.000131216)
+# Attempting: (31, 0.000161804)
+# Attempting: (32, 0.00019201)
+# Attempting: (33, 0.000222197)
+# Attempting: (34, 0.000262874)
+# Attempting: (35, 0.000331212)
+# Attempting: (36, 0.000398027)
+# Attempting: (37, 0.00048487)
+# Attempting: (38, 0.000576151)
+# Attempting: (39, 0.000682611)
+# Attempting: (40, 0.000818025)
+# Attempting: (41, 0.000994868)
+# Attempting: (42, 0.001226843)
+# Attempting: (43, 0.001489627)
+# Attempting: (44, 0.001780744)
+# Attempting: (45, 0.002112736)
+# Attempting: (46, 0.002531663)
+# Attempting: (47, 0.003069874)
+# Attempting: (48, 0.003756363)
+# Attempting: (49, 0.004525025)
+# Attempting: (50, 0.005409345)
+# Attempting: (51, 0.006440582)
+# Attempting: (52, 0.007714192)
+# Attempting: (53, 0.009287987)
+# Attempting: (54, 0.011383832)
+# Attempting: (55, 0.013703727)
+# Attempting: (56, 0.01642689)
+# Attempting: (57, 0.019635273)
+# Attempting: (58, 0.023663976)
+# Attempting: (59, 0.028648444)
+# Attempting: (60, 0.034526909)
+# Attempting: (61, 0.041242498)
+# Attempting: (62, 0.049332977)
+# Attempting: (63, 0.061480192)
+# Attempting: (64, 0.071023298)
+# Attempting: (65, 0.084898336)
+# Attempting: (66, 0.103326875)
+# Attempting: (67, 0.124819443)
+# Attempting: (68, 0.150004837)
+# Attempting: (69, 0.180526228)
+# Attempting: (70, 0.218291958)
+# Attempting: (71, 0.262541351)
+# Attempting: (72, 0.316756714)
+# Attempting: (73, 0.380654405)
+# Attempting: (74, 0.483686695)
+# Attempting: (75, 0.555607798)
+# Attempting: (76, 0.653096033)
+# Attempting: (77, 0.781729737)
+# Attempting: (78, 0.940445135)
+# Attempting: (79, 1.141134718)
+# Attempting: (80, 1.369095458)
+# Attempting: (81, 1.635135005)
+# Found closest N to be 78, at 0.940445135 s
+# Linear Increase
+# size, s
+78,0.968568053
+79,1.149646679
+80,1.384488545
+81,1.644850705
+82,1.982499272
+83,2.411466065
+84,2.897462768
+85,3.447960091
+86,4.138207778
+87,5.045594517
+88,6.061775075
+89,7.291385811
+90,8.777407514
+91,10.382708761
+92,12.498835564
+93,15.133544669
+94,17.953640199
+95,22.233521604
+96,26.718277352
+97,32.151303849
+98,38.625400828
+99,46.416735827
+100,55.532784739
+101,66.87647449
+102,80.462166556
+103,96.63445787
+104,116.941359685
+105,138.837016032
+106,167.579512195
+107,204.248298869
+# Doubling Increase
+# size, s
+78,0.967495578

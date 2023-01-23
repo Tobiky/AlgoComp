@@ -2,24 +2,23 @@
 from importlib import import_module
 from time import time_ns
 from typing import Any, Callable
+from multiprocessing import Process
 
-max_timeout = 3 * 60 * 60 # 3 min
+max_timeout = 3 * 60 # 3 min
 
 def time_process(func: Callable[..., Any], args: list, timeout: int | None = None, repitions: int | None = None):
     total_time = 0
     repitions = repitions or 1
 
     for _ in range(repitions):
-        # process = Process(target=func, args=args)
+        process = Process(target=func, args=args)
 
-        # process.start()
+        process.start()
         start = time_ns()
 
-        # process.join(timeout or max_timeout) # seconds
-        # if process.is_alive():
-        #     process.terminate()
-
-        func(*args)
+        process.join(timeout or max_timeout) # seconds
+        if process.is_alive():
+            process.terminate()
 
         stop = time_ns()
 
@@ -80,7 +79,6 @@ if __name__ == "__main__":
         print(f"{size},{duration / ns_time_const}")
 
         if duration / ns_time_const > max_timeout: # larger than 3 min
-            print("break")
             break
 
     print("# Doubling Increase")
