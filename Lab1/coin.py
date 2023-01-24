@@ -1,5 +1,5 @@
 import sys
-from typing import Union, List
+from typing import Union, List, Dict
 
 # if digit is None:
 #     digit = len(lookup) - 1
@@ -19,7 +19,29 @@ def a(required: int, lookup: List[int]):
 
 b = a
 
-def c(required: int, lookup: List[int]):
+def c(required: Union[int, float], lookup: List[int], memory: Union[Dict[int, int], None] = None):
+    if required < 0:
+        return float("inf")
+    elif required == 0:
+        return 0
+    else:
+        if memory == None:
+            memory = dict() 
+
+        if required in memory:
+            return memory[required]
+        else:
+            new_lookup = lookup # list(filter(lambda x: x <= required, lookup))
+
+            def calc(x):
+                return 1 + c(required - x, new_lookup, memory)
+
+            values = list(map(calc, new_lookup))
+            values.append(required)
+
+            minimum = min(values)
+            memory[required] = minimum
+            return minimum
     pass
 
 def d(required: int, lookup: List[int]):
@@ -33,7 +55,7 @@ def read_input(inp: Union[List[str], None] = None):
     return values[0], values[1::]
 
 def setup():
-    sys.setrecursionlimit(5000)
+    sys.setrecursionlimit(100_000)
 
 def teardown():
     pass
@@ -43,7 +65,11 @@ if __name__ == "__main__":
 
     required, lookup = read_input()
     lookup.sort()
-    coins = a(required, lookup)
+    
+    __slot__ = ("memory",)
+    memory = dict() 
+
+    coins = c(required, lookup, memory)
     print(coins)
 
     teardown()

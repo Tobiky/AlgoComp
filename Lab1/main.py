@@ -20,6 +20,8 @@ def time_process(func: Callable[..., Any], args: list, timeout: int | None = Non
         if process.is_alive():
             process.terminate()
 
+        func(*args)
+
         stop = time_ns()
 
         duration = stop - start
@@ -46,11 +48,13 @@ def constant(n: int):
 if __name__ == "__main__":
     ns_time_const = 10 ** 9
 
-    func = "b"
+    func = "c"
     mod  = "coin"
     module = import_module(mod)
 
     coins = [5, 6, 7]
+
+    getattr(module, "setup")()
 
     get_duration = lambda size: time_process(
             func=getattr(module, func),
@@ -58,11 +62,16 @@ if __name__ == "__main__":
 
     calculations: list[tuple[float, int]] = []
 
-    for size in linear(1):
+    prev = 1
+    while True:
+        size = prev * 2
+
         duration = get_duration(size)
         print(f"# Attempting: ({size}, {duration / ns_time_const})")
 
         calculations.append((duration, size))
+
+        prev = size
 
         if duration / ns_time_const > 1.5: # larger than 3 min
             break
@@ -91,3 +100,4 @@ if __name__ == "__main__":
         if duration / ns_time_const > max_timeout: # larger than 3 min
             break
 
+    getattr(module, "teardown")()
