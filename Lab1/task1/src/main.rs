@@ -1,5 +1,13 @@
-use std::{collections::HashMap, io::{stdin, BufRead}, time::{Duration, Instant}, env::args};
+#[allow(unused_imports)]
+use std::{
+    collections::HashMap,
+    env::args,
+    hash::Hash,
+    io::{stdin, BufRead},
+    time::{Duration, Instant},
+};
 
+#[allow(dead_code)]
 fn a(required: i32, lookup: &Vec<i32>) -> i32 {
     if required < 0 {
         i32::MAX - 1
@@ -16,6 +24,7 @@ fn a(required: i32, lookup: &Vec<i32>) -> i32 {
     }
 }
 
+#[allow(dead_code)]
 fn c_calc(required: i32, lookup: &Vec<i32>, memory: &mut HashMap<i32, i32>) -> i32 {
     if required < 0 {
         i32::MAX - 1
@@ -37,10 +46,32 @@ fn c_calc(required: i32, lookup: &Vec<i32>, memory: &mut HashMap<i32, i32>) -> i
     }
 }
 
+#[allow(dead_code)]
 fn c(required: i32, lookup: &Vec<i32>) -> i32 {
     let mut memory = HashMap::new();
 
     c_calc(required, lookup, &mut memory)
+}
+
+fn e(required: i32, lookup: &Vec<i32>) -> i32 {
+    let mut memory = Vec::with_capacity(required as usize + 1);
+    memory.push(0);
+
+    for req in 1..=required {
+        let mut coins = lookup
+            .iter()
+            .map(|x| req - x)
+            .filter(|&x| x > -1)
+            .map(|x| 1 + memory[x as usize])
+            .collect::<Vec<_>>();
+        coins.push(req);
+
+        let minimum = *coins.iter().min().unwrap();
+
+        memory.push(minimum);
+    }
+
+    return *memory.get(required as usize).unwrap();
 }
 
 fn read_input() -> (i32, Vec<i32>) {
@@ -80,69 +111,73 @@ fn execution_time(f: CoinSolution, size: i32) -> Duration {
 const RETRIES: usize = 3;
 
 fn take_time(f: CoinSolution, size: i32) -> f64 {
-    (0..RETRIES).into_iter().map(|_| execution_time(f, size).as_secs_f64()).sum::<f64>() / RETRIES as f64
+    (0..RETRIES)
+        .into_iter()
+        .map(|_| execution_time(f, size).as_secs_f64())
+        .sum::<f64>()
+        / RETRIES as f64
 }
 
 const MAX_WAIT: f64 = 60.0;
 
-fn benchmark(f: CoinSolution)
-{
-    //let mut size = 1;
-    //let mut results = Vec::new();
-    //loop {
-    //    eprint!("Attempting {}: ", size);
-    //    let time = take_time(f, size);
-    //    eprintln!("{}s", time);
-    //    results.push((size, time));
+const MAX_SAMPLES: i32 = 10;
 
-    //    if time >= 1.3 {
-    //        break;
-    //    }
+fn benchmark(f: CoinSolution) {
+    let mut size = 1;
+    let mut results = Vec::new();
+    loop {
+        eprint!("Attempting {}: ", size);
+        let time = take_time(f, size);
+        eprintln!("{}s", time);
+        results.push((size, time));
 
-    //    size = i32::max(size + 1, (size as f64 * (1.0 + time)) as i32);
-    //}
+        if time >= 1.3 {
+            break;
+        }
 
-    //let mut ceiling = size;
-    //let mut floor = results.iter().rev().find(|(_, t)| *t < 1.0).unwrap().0;
-    //loop {
-    //    let next_diff = (ceiling - floor) / 2;
-    //    size = floor + next_diff;
+        size = i32::max(size + 1, (size as f64 * (1.0 + time)) as i32);
+    }
 
-    //    eprint!("Attempting {}: ", size);
-    //    let time = take_time(f, size);
-    //    eprintln!("{}s", time);
-    //    results.push((size, time));
+    let mut ceiling = size;
+    let mut floor = results.iter().rev().find(|(_, t)| *t < 1.0).unwrap().0;
+    loop {
+        let next_diff = (ceiling - floor) / 2;
+        size = floor + next_diff;
 
-    //    if next_diff <= 0 {
-    //        break;
-    //    }
-    //    else if time > 1.0 {
-    //        ceiling -= next_diff;
-    //    } else {
-    //        floor += next_diff;
-    //    }
-    //}
+        eprint!("Attempting {}: ", size);
+        let time = take_time(f, size);
+        eprintln!("{}s", time);
+        results.push((size, time));
 
-    //results.sort_unstable_by(|(_, t1), (_, t2)| f64::abs(t1 - 1.0).partial_cmp(&f64::abs(t2 - 1.0)).unwrap());
+        if next_diff <= 0 {
+            break;
+        } else if time > 1.0 {
+            ceiling -= next_diff;
+        } else {
+            floor += next_diff;
+        }
+    }
 
-    //let (closest_n, duration) = results.remove(0);
+    results.sort_unstable_by(|(_, t1), (_, t2)| {
+        f64::abs(t1 - 1.0).partial_cmp(&f64::abs(t2 - 1.0)).unwrap()
+    });
 
-    //eprintln!("Found closest N = {} at {}s", closest_n, duration);
+    let (closest_n, duration) = results.remove(0);
 
-    let closest_n = 362194;
+    eprintln!("Found closest N = {} at {}s", closest_n, duration);
 
-    // size = closest_n;
-    // println!("# Linear Increase\n# n, time(s)");
-    // loop {
-    //     let time = take_time(f, size);
-    //     println!("{}, {}", size, time);
+    size = closest_n;
+    println!("# Linear Increase\n# n, time(s)");
+    loop {
+        let time = take_time(f, size);
+        println!("{}, {}", size, time);
 
-    //     size += 1;
+        size += 1;
 
-    //     if time >= MAX_WAIT || size - closest_n > 100 {
-    //         break;
-    //     }
-    // }
+        if time >= MAX_WAIT || size - closest_n > MAX_SAMPLES {
+            break;
+        }
+    }
 
     let mut size = closest_n;
     let mut counter = 0;
@@ -154,14 +189,14 @@ fn benchmark(f: CoinSolution)
         size *= 2;
         counter += 1;
 
-        if time >= MAX_WAIT || counter >= 100 {
+        if time >= MAX_WAIT || counter >= MAX_SAMPLES {
             break;
         }
     }
 }
 
 pub fn main() {
-    let f: CoinSolution = c;
+    let f: CoinSolution = e;
 
     if args().into_iter().any(|arg| arg.contains("-b")) {
         eprintln!("Benchmarking");
